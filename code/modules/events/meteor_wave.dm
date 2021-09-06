@@ -20,6 +20,33 @@
 	..()
 	if(!wave_type)
 		determine_wave_type()
+<<<<<<< HEAD
+=======
+	start_x = sin(rand(0, 360)) * 9000
+	start_y = cos(rand(0, 360)) * 9000
+	station_target = SSorbits.station_instance
+	if(!station_target)
+		CRASH("Meteor failed to locate a target.")
+
+/datum/round_event/meteor_wave/Destroy(force, ...)
+	station_target = null
+	. = ..()
+
+/datum/round_event/meteor_wave/tick()
+	if(ISMULTIPLE(activeFor, 3) && activeFor < 61 && station_target)
+		var/datum/orbital_object/meteor/meteor = new()
+		meteor.name = "Meteor ([wave_name])"
+		meteor.meteor_types = wave_type
+		meteor.start_x = start_x + rand(-600, 600)
+		meteor.start_y = start_y + rand(-600, 600)
+		meteor.position.x = meteor.start_x
+		meteor.position.y = meteor.start_y
+		//Calculate velocity
+		meteor.velocity.x = (station_target.position.x - meteor.start_x * 10) / meteor_time
+		meteor.velocity.y = (station_target.position.y - meteor.start_y * 10) / meteor_time
+		meteor.end_tick = world.time + meteor_time
+		meteor.target = station_target
+>>>>>>> 0de80f86c2... Supercruise - Optimised + Improved collision detection (#5313)
 
 /datum/round_event/meteor_wave/on_admin_trigger()
 	if(alert(usr, "Trigger meteors instantly? (This will not change the alert, just send them quicker. Nobody will ever notice!)", "Meteor Trigger", "Yes", "No") == "Yes")
